@@ -1,46 +1,65 @@
 <script>
-  import ContactCard from "./ContactCard.svelte";
+  let newPassword = "";
+  let passwords = [];
+  let error = false;
 
-  let name = "";
-  let jobTitle = "";
-  let description = "";
-  let userImage;
-  let age = 30;
-
-  $: uppercaseName = name.toUpperCase();
-
-  $: console.log(name);
-
-  $: if (name === "Maximilian") {
-    console.log("It runs!");
-    age = 31;
+  $: if (newPassword.trim().length < 5) {
+    error = "short";
+  } else if (newPassword.trim().length > 10) {
+    error = "long";
+  } else {
+    error = false;
   }
 
-  function incrementAge() {
-    age += 1;
-  }
+  const deletePassword = id => {
+    passwords = passwords.filter(element => element.id !== id);
+  };
 
-  function changeName() {
-    name = "Maximilian";
-  }
-
-  function nameInput(event) {
-    const enteredValue = event.target.value;
-    name = enteredValue;
-  }
+  const savePassword = () => {
+    if (!error) {
+      passwords = [...passwords, { id: Math.random(), text: newPassword }];
+    }
+    newPassword = "";
+  };
 </script>
 
 <style>
-  h1 {
-    color: purple;
+  button {
+    margin: 1rem 0;
+  }
+  p.error {
+    color: red;
+  }
+  li {
+    margin: 0.7rem 0;
+    cursor: pointer;
+  }
+  div.passwordList {
+    background-color: white;
+    border: 1px solid darkgray;
+    padding-left: 1rem;
+    width: 50%;
   }
 </style>
 
-<h1>Hello {uppercaseName}, my age is {age}!</h1>
-<button on:click={incrementAge}>Change Age</button>
-<input type="text" bind:value={name} />
-<input type="text" bind:value={jobTitle} />
-<input type="text" bind:value={description} />
-<input type="text" bind:value={userImage} />
+{#if passwords.length}
+  <div class="passwordList">
+    <h3>Saved Passwords</h3>
+    <p>Click to remove from the list.</p>
+    <ul>
+      {#each passwords as password, index (password.id)}
+        <li on:click={() => deletePassword(password.id)}>{password.text}</li>
+      {/each}
+    </ul>
+  </div>
+{/if}
 
-<ContactCard {name} {jobTitle} {description} {userImage} />
+<div>
+  <p>Enter a password between 5 and 10 characters.</p>
+  <input type="password" bind:value={newPassword} />
+  {#if error}
+    <p class="error">This password is too {error}!</p>
+  {:else}
+    <button on:click={savePassword}>Save</button>
+  {/if}
+</div>

@@ -1,8 +1,10 @@
 <script>
-  export let name;
+  export let userName;
   export let jobTitle;
   export let description;
   export let userImage;
+
+  const inititalName = userName;
 </script>
 
 <style>
@@ -11,6 +13,7 @@
     max-width: 30rem;
     border-radius: 5px;
     margin: 1rem 0;
+    background: white;
   }
 
   header {
@@ -26,7 +29,7 @@
   }
 
   .thumb-placeholder {
-    background-color: #ccc;
+    background: #ccc;
   }
 
   img {
@@ -66,10 +69,10 @@
 <div class="contact-card">
   <header>
     <div class="thumb" class:thumb-placeholder={!userImage}>
-      <img src={userImage} alt="User Image" />
+      <img src={userImage} alt={userName} />
     </div>
     <div class="user-data">
-      <h1>{name}</h1>
+      <h1>{userName} / {inititalName}</h1>
       <h2>{jobTitle}</h2>
     </div>
   </header>
@@ -77,5 +80,3 @@
     <p>{description}</p>
   </div>
 </div>
-
-<!-- https://magazine.medlineplus.gov/images/uploads/main_images/nickjonastype1-sp17.jpg -->
